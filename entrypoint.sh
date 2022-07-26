@@ -19,7 +19,8 @@ fi
 
 # Input arguments with default values
 INPUT_GIT_SERVER=${INPUT_GIT_SERVER:-"github.com"}
-INPUT_DESTINATION_BRANCH=${INPUT_DESTINATION_BRANCH:-"github.com"}
+INPUT_DESTINATION_BRANCH=${INPUT_DESTINATION_BRANCH:-"$GITHUB_HEAD_REF"}
+INPUT_DESTINATION_FOLDER=${INPUT_DESTINATION_FOLDER:-"."}
 
 echo "Copying target: '$INPUT_SOURCE_TARGET'"
 echo "From source repo: '$GITHUB_REPOSITORY'"
@@ -37,7 +38,7 @@ DESTINATION_PATH="$(realpath "$TARGET_REPO_DIR"/"$INPUT_DESTINATION_FOLDER")"
 echo "Cloning destination git repository..."
 git config --global user.email "$INPUT_USER_EMAIL"
 git config --global user.name "$INPUT_USER_NAME"
-git clone "https://x-access-token:$INPUT_REPO_LEVEL_SEC@$INPUT_GIT_SERVER/$INPUT_DESTINATION_REPO.git" "$TARGET_REPO_DIR"
+git clone "https://x-access-token:$INPUT_REPO_LEVEL_SECRET@$INPUT_GIT_SERVER/$INPUT_DESTINATION_REPO.git" "$TARGET_REPO_DIR"
 
 ################### Find the Base Ref Branch in Target Repo ####################
 echo "Determining if target repo has branch target branch name already..."
