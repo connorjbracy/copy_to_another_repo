@@ -45,7 +45,7 @@ echo "Determining if target repo has branch target branch name already..."
 TARGET_ORIGIN_BRANCH_NAME="origin/$INPUT_DESTINATION_BRANCH"
 TARGET_REMOTE_ORIGIN_BRANCH_NAME="remotes/$TARGET_ORIGIN_BRANCH_NAME"
 echo "Looking for '$INPUT_DESTINATION_BRANCH'..."
-if git branch | grep -q "$INPUT_DESTINATION_BRANCH"; then
+if git -C "$TARGET_REPO_DIR" branch | grep -q "$INPUT_DESTINATION_BRANCH"; then
   echo "Found '$INPUT_DESTINATION_BRANCH' in local clone. Checking out..."
   git -C "$TARGET_REPO_DIR" checkout "$INPUT_DESTINATION_BRANCH"
 else
