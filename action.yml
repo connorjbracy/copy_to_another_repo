@@ -37,16 +37,16 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ user-email }}
-    - ${{ user-name }}
-    - ${{ source-target }}
-    - ${{ destination-repo }}
-    - ${{ destination-branch }}
-    - ${{ destination-folder }}
-    - ${{ use-rsync }}
-    - ${{ commit-message }}
-    - ${{ git-server }}
-    - ${{ repo-level-secret }}
+    - ${{ inputs.user-email }}
+    - ${{ inputs.user-name }}
+    - ${{ inputs.source-target }}
+    - ${{ inputs.destination-repo }}
+    - ${{ inputs.destination-branch }}
+    - ${{ inputs.destination-folder }}
+    - ${{ inputs.use-rsync }}
+    - ${{ inputs.commit-message }}
+    - ${{ inputs.git-server }}
+    - ${{ inputs.repo-level-secret }}
 branding:
   icon: 'git-commit'
   color: 'green'
