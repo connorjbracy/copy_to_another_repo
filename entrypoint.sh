@@ -44,21 +44,27 @@ git clone "https://x-access-token:$INPUT_REPO_LEVEL_SECRET@$INPUT_GIT_SERVER/$IN
 echo "Determining if target repo has branch target branch name already..."
 TARGET_ORIGIN_BRANCH_NAME="origin/$INPUT_DESTINATION_BRANCH"
 TARGET_REMOTE_ORIGIN_BRANCH_NAME="remotes/$TARGET_ORIGIN_BRANCH_NAME"
-echo "Looking for '$INPUT_DESTINATION_BRANCH' in origin..."
-TARGET_ORIGIN_HEAD_REF="$(                                       \
-  git -C "$TARGET_REPO_DIR" branch -a                            \
-  | sed -nr "s|^\s*($TARGET_REMOTE_ORIGIN_BRANCH_NAME)\s*$|\1|p" \
-)"
-######## Checkout Existing Base Ref Branch or Create New with Same Name ########
-if [ "$TARGET_ORIGIN_HEAD_REF" ]; then
-  echo "Found $TARGET_ORIGIN_HEAD_REF, pushing to existing branch!"
-  echo "Switching to target repo's branch..."
-  git -C "$TARGET_REPO_DIR"                                      \
-      switch -c "$INPUT_DESTINATION_BRANCH" "$TARGET_ORIGIN_HEAD_REF"
+echo "Looking for '$INPUT_DESTINATION_BRANCH'..."
+if git branch | grep -q "$INPUT_DESTINATION_BRANCH"; then
+  echo "Found '$INPUT_DESTINATION_BRANCH' in local clone. Checking out..."
+  git -C "$TARGET_REPO_DIR" checkout "$INPUT_DESTINATION_BRANCH"
 else
-  echo "Did not find $TARGET_ORIGIN_BRANCH_NAME, starting a new branch!"
-  echo "Creating a new branch for the target repo..."
-  git -C "$TARGET_REPO_DIR" checkout -b "$INPUT_DESTINATION_BRANCH"
+  echo "Didin't find '$INPUT_DESTINATION_BRANCH' in local clone. Looking in origin..."
+  TARGET_ORIGIN_HEAD_REF="$(                                       \
+    git -C "$TARGET_REPO_DIR" branch -a                            \
+    | sed -nr "s|^\s*($TARGET_REMOTE_ORIGIN_BRANCH_NAME)\s*$|\1|p" \
+  )"
+  ######## Checkout Existing Base Ref Branch or Create New with Same Name ########
+  if [ "$TARGET_ORIGIN_HEAD_REF" ]; then
+    echo "Found $TARGET_ORIGIN_HEAD_REF, pushing to existing branch!"
+    echo "Switching to target repo's branch..."
+    git -C "$TARGET_REPO_DIR"                                      \
+        switch -c "$INPUT_DESTINATION_BRANCH" "$TARGET_ORIGIN_HEAD_REF"
+  else
+    echo "Did not find $TARGET_ORIGIN_BRANCH_NAME, starting a new branch!"
+    echo "Creating a new branch for the target repo..."
+    git -C "$TARGET_REPO_DIR" checkout -b "$INPUT_DESTINATION_BRANCH"
+  fi
 fi
 
 ################################################################################
