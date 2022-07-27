@@ -1,5 +1,5 @@
-name: 'Push a file to another repository'
-description: 'Used for pushing a copy of a file to another repository'
+name: 'Copy to another repository'
+description: 'Used for pushing a copy of a file or directory to another repository'
 inputs:
   user_email:
     description: 'Email for the git commit'
