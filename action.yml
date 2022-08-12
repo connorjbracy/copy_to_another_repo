@@ -1,10 +1,10 @@
 name: 'Copy to another repository'
 description: 'Used for pushing a copy of a file or directory to another repository'
 inputs:
-  user_email:
+  email:
     description: 'Email for the git commit'
     required: true
-  user_name:
+  username:
     description: 'GitHub username for the commit'
     required: true
   source_target:
